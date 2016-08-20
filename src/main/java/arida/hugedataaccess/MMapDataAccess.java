@@ -18,6 +18,9 @@ public class MMapDataAccess implements DataAccess {
 	}
 	
 	public MMapDataAccess(String fileName, int bufferSize) {
+		if (bufferSize < 8) {
+			throw new DataAccessException("Buffer size too short. Try to increase it.");
+		}
 		try {
 			randomAccessFile = new RandomAccessFile(fileName, "rw");
 			buffers = new ArrayList<ByteBuffer>();
@@ -83,6 +86,8 @@ public class MMapDataAccess implements DataAccess {
 	public double getDouble(long bytePos) {
 		int bufferIndex = getBufferIndex(bytePos);
 		int bufferPos = getBufferRelativePos(bytePos);
+		//System.out.println("bufferIndex: " + bufferIndex);
+		//System.out.println("bufferPos: " + bufferPos);
 		return buffers.get(bufferIndex).getDouble(bufferPos);	
 	}
 

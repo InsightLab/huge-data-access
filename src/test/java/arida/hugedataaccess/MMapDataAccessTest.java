@@ -13,17 +13,17 @@ public class MMapDataAccessTest {
 	
 	@Before
 	public void setUp() {
-		dataAccess = new MMapDataAccess(fileName, 3);
-		dataAccess.ensureCapacity(11);
+		dataAccess = new MMapDataAccess(fileName, 9);
+		dataAccess.ensureCapacity(26);
 	}
 	
 	@Test
 	public void testSize() {
 		assertEquals(12, dataAccess.size());
-		dataAccess.ensureCapacity(5);
+		dataAccess.ensureCapacity(21);
 		assertEquals(12, dataAccess.size());
-		dataAccess.ensureCapacity(13);
-		assertEquals(15, dataAccess.size());
+		dataAccess.ensureCapacity(31);
+		assertEquals(31, dataAccess.size());
 	}
 
 	@Test

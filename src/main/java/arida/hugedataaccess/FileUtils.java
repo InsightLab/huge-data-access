@@ -6,7 +6,9 @@ public class FileUtils {
 
     public static void delete(String fileName) {
     		File file = new File(fileName);
-    		delete(file);
+    		if (file.exists()) {
+        		delete(file);
+    		}
     }
 
 	
