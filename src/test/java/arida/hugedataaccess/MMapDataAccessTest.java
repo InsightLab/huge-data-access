@@ -20,19 +20,24 @@ public class MMapDataAccessTest {
 	
 	@Before
 	public void setUp() {
-		dataAccess1 = new MMapDataAccess(fileName, 21);
-		dataAccess1.ensureCapacity(63);
+		dataAccess1 = new MMapDataAccess(fileName, 16);
+		dataAccess1.ensureCapacity(64);
+	}
+
+	@Test(expected = DataAccessException.class)
+	public void testBufferSize() {
+		new MMapDataAccess(fileName, 24);
 	}
 	
 	@Test
 	public void testSize() {
-		assertEquals(63, dataAccess1.getCapacity());
-		dataAccess1.ensureCapacity(21);
-		assertEquals(63, dataAccess1.getCapacity());
-		dataAccess1.ensureCapacity(105);
-		assertEquals(105, dataAccess1.getCapacity());
-		dataAccess1.ensureCapacity(126);
-		assertEquals(126, dataAccess1.getCapacity());
+		assertEquals(64, dataAccess1.getCapacity());
+		dataAccess1.ensureCapacity(64);
+		assertEquals(64, dataAccess1.getCapacity());
+		dataAccess1.ensureCapacity(192);
+		assertEquals(192, dataAccess1.getCapacity());
+		dataAccess1.ensureCapacity(320);
+		assertEquals(320, dataAccess1.getCapacity());
 	}
 
 	@Test
@@ -44,14 +49,16 @@ public class MMapDataAccessTest {
 		dataAccess1.setShort(5, Short.MAX_VALUE);	// size = 2
 		dataAccess1.setByte(7, (byte)3); 			// size = 1
 		dataAccess1.setInt(8, Integer.MAX_VALUE);	// size = 4
-		dataAccess1.setByte(12, (byte)4); 			// size = 1
-		dataAccess1.setLong(13, Long.MAX_VALUE);		// size = 8
-		dataAccess1.setByte(21, (byte)5); 			// size = 1
-		dataAccess1.setFloat(22, Float.MAX_VALUE);	// size = 4
-		dataAccess1.setByte(26, (byte)6); 			// size = 1
-		dataAccess1.setDouble(27, Double.MAX_VALUE);	// size = 8
-		dataAccess1.setByte(35, (byte)7); 			// size = 1
-		dataAccess1.setByte(62, (byte)8); 			// size = 1
+		dataAccess1.setInt(12, (byte)4); 			// size = 4
+		dataAccess1.setByte(16, (byte)4); 			// size = 1
+		dataAccess1.setLong(17, Long.MAX_VALUE);		// size = 8
+		dataAccess1.setByte(25, (byte)5); 			// size = 1
+		dataAccess1.setFloat(26, Float.MAX_VALUE);	// size = 4
+		dataAccess1.setByte(30, (byte)6); 			// size = 1
+		dataAccess1.setByte(31, (byte)6); 			// size = 1
+		dataAccess1.setDouble(32, Double.MAX_VALUE);	// size = 8
+		dataAccess1.setByte(40, (byte)7); 			// size = 1
+		dataAccess1.setByte(63, (byte)8); 			// size = 1
 		assertEquals(Byte.MAX_VALUE, dataAccess1.getByte(0));
 		assertEquals((byte)1, dataAccess1.getByte(1));
 		assertEquals(Character.MAX_VALUE, dataAccess1.getChar(2));
@@ -59,14 +66,16 @@ public class MMapDataAccessTest {
 		assertEquals(Short.MAX_VALUE, dataAccess1.getShort(5));
 		assertEquals((byte)3, dataAccess1.getByte(7));
 		assertEquals(Integer.MAX_VALUE, dataAccess1.getInt(8));
-		assertEquals((byte)4, dataAccess1.getByte(12));
-		assertEquals(Long.MAX_VALUE, dataAccess1.getLong(13));
-		assertEquals((byte)5, dataAccess1.getByte(21));
-		assertEquals(Float.MAX_VALUE, dataAccess1.getFloat(22), 0.0001);
-		assertEquals((byte)6, dataAccess1.getByte(26));
-		assertEquals(Double.MAX_VALUE, dataAccess1.getDouble(27), 0.0001);
-		assertEquals((byte)7, dataAccess1.getByte(35));
-		assertEquals((byte)8, dataAccess1.getByte(62));
+		assertEquals((byte)4, dataAccess1.getInt(12));
+		assertEquals((byte)4, dataAccess1.getByte(16));
+		assertEquals(Long.MAX_VALUE, dataAccess1.getLong(17));
+		assertEquals((byte)5, dataAccess1.getByte(25));
+		assertEquals(Float.MAX_VALUE, dataAccess1.getFloat(26), 0.0001);
+		assertEquals((byte)6, dataAccess1.getByte(30));
+		assertEquals((byte)6, dataAccess1.getByte(31));
+		assertEquals(Double.MAX_VALUE, dataAccess1.getDouble(32), 0.0001);
+		assertEquals((byte)7, dataAccess1.getByte(40));
+		assertEquals((byte)8, dataAccess1.getByte(63));
 	}
 	
 	@After

@@ -12,6 +12,8 @@ public class MMapDataAccess implements DataAccess {
 	private RandomAccessFile randomAccessFile;
 	private List<ByteBuffer> buffers;
 	private int bufferSize;
+	private int bufferSizePower;
+	private int bufferSizeDivisor;
 	private static int defaultBufferSize = 1024 * 1024;  // 1 MB
 	
 	public MMapDataAccess(String fileName) {
@@ -42,7 +44,6 @@ public class MMapDataAccess implements DataAccess {
 			if (expectedNumberOfBuffers > currentNumberOfBuffers) {
 				for (int i = currentNumberOfBuffers; i < expectedNumberOfBuffers; i++) {
 					int startPos = i * bufferSize;
-					//System.out.println("buffer#, startPos: " + i + ", " + startPos);
 					ByteBuffer buffer = randomAccessFile.getChannel().map(FileChannel.MapMode.READ_WRITE, startPos, bufferSize);
 					buffers.add(buffer);
 				}
@@ -65,100 +66,86 @@ public class MMapDataAccess implements DataAccess {
 	}
 
 	public byte getByte(long bytePos) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		return buffers.get(bufferIndex).get(bufferPos);	
 	}
 	
 	public void setByte(long bytePos, byte element) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		buffers.get(bufferIndex).put(bufferPos, element);
 	}
 
 	public char getChar(long bytePos) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		return buffers.get(bufferIndex).getChar(bufferPos);	
 	}
 	
 	public void setChar(long bytePos, char element) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		buffers.get(bufferIndex).putChar(bufferPos, element);
 	}
 
 	public short getShort(long bytePos) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		return buffers.get(bufferIndex).getShort(bufferPos);	
 	}
 	
 	public void setShort(long bytePos, short element) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		buffers.get(bufferIndex).putShort(bufferPos, element);
 	}
 
 	public int getInt(long bytePos) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		return buffers.get(bufferIndex).getInt(bufferPos);	
 	}
 	
 	public void setInt(long bytePos, int element) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		buffers.get(bufferIndex).putInt(bufferPos, element);
 	}
 
 	public long getLong(long bytePos) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		return buffers.get(bufferIndex).getLong(bufferPos);	
 	}
 	
 	public void setLong(long bytePos, long element) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		buffers.get(bufferIndex).putLong(bufferPos, element);
 	}
 
 	public float getFloat(long bytePos) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		return buffers.get(bufferIndex).getFloat(bufferPos);	
 	}
 
 	public void setFloat(long bytePos, float element) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		buffers.get(bufferIndex).putFloat(bufferPos, element);
 	}
 
 	public double getDouble(long bytePos) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		return buffers.get(bufferIndex).getDouble(bufferPos);	
 	}
 
 	public void setDouble(long bytePos, double element) {
-		int bufferIndex = (int) (bytePos / bufferSize);
-		int bufferPos =   (int) (bytePos % bufferSize);
-		System.out.println("bytePos, bufferIndex, bufferPos: " + bytePos + ", " + bufferIndex + ", " + bufferPos);
+		int bufferIndex = (int) bytePos >> bufferSizePower;   // (int) (bytePos / bufferSize)
+		int bufferPos =   (int)(bytePos & bufferSizeDivisor); // (int) (bytePos % bufferSize);
 		buffers.get(bufferIndex).putDouble(bufferPos, element);
 	}
 
@@ -185,8 +172,11 @@ public class MMapDataAccess implements DataAccess {
 
 	public void setBufferSize(int bufferSize) {
 		this.bufferSize = bufferSize;
-		//this.bufferSizePower = (int) (Math.log(bufferSize) / Math.log(2));
-		//this.bufferSizeDivisor = bufferSize - 1;
+		this.bufferSizePower = (int) (Math.log(bufferSize) / Math.log(2));
+		if (Math.pow(2, bufferSizePower) != bufferSize) {
+			throw new DataAccessException("bufferSize must be a power of 2.");
+		}
+		this.bufferSizeDivisor = bufferSize - 1;
 	}
 	
 }
