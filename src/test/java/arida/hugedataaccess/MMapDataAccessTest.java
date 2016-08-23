@@ -117,6 +117,30 @@ public class MMapDataAccessTest {
 		assertEquals((byte)8, dataAccess1.getByte());
 	}
 	
+	@Test
+	public void testSetGet3() {
+		String fileName = "MMapDataAccessTest2.mmap";
+		DataAccess dataAccess2 = new MMapDataAccess(fileName);
+		dataAccess2.ensureCapacity(1024 * 1024 * 2);
+		int sum1 = 0;
+		int numberOfElements = 1024 * 1024 / 8;
+		for (int i=0; i < numberOfElements; i++) {
+			dataAccess2.setInt(i);
+			sum1 += i;
+			dataAccess2.setDouble(i);
+			sum1 += i;
+		}
+		int sum2 = 0;
+		dataAccess2.setCurrentPosition(0);
+		for (long i=0; i < numberOfElements; i++) {
+			sum2 += dataAccess2.getInt();
+			sum2 += dataAccess2.getDouble();
+		}
+		dataAccess2.close();
+		FileUtils.delete(fileName);
+		assertEquals(sum1, sum2);
+	}
+		
 	@After
 	public void tearDown() {
 		dataAccess1.close();
