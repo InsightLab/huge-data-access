@@ -78,8 +78,47 @@ public class MMapDataAccessTest {
 		assertEquals((byte)8, dataAccess1.getByte(63));
 	}
 	
+	@Test
+	public void testSetGet2() {
+		dataAccess1.setByte(Byte.MAX_VALUE); 		// size = 1
+		dataAccess1.setByte((byte)1); 			// size = 1
+		dataAccess1.setChar(Character.MAX_VALUE);	// size = 2
+		dataAccess1.setByte((byte)2); 			// size = 1
+		dataAccess1.setShort(Short.MAX_VALUE);	// size = 2
+		dataAccess1.setByte((byte)3); 			// size = 1
+		dataAccess1.setInt(Integer.MAX_VALUE);	// size = 4
+		dataAccess1.setInt((byte)4); 			// size = 4
+		dataAccess1.setByte((byte)4); 			// size = 1
+		dataAccess1.setLong(Long.MAX_VALUE);		// size = 8
+		dataAccess1.setByte((byte)5); 			// size = 1
+		dataAccess1.setFloat(Float.MAX_VALUE);	// size = 4
+		dataAccess1.setByte((byte)6); 			// size = 1
+		dataAccess1.setByte((byte)6); 			// size = 1
+		dataAccess1.setDouble(Double.MAX_VALUE);	// size = 8
+		dataAccess1.setByte((byte)7); 			// size = 1
+		dataAccess1.setByte((byte)8); 			// size = 1
+		dataAccess1.setCurrentPosition(0);
+		assertEquals(Byte.MAX_VALUE, dataAccess1.getByte());
+		assertEquals((byte)1, dataAccess1.getByte());
+		assertEquals(Character.MAX_VALUE, dataAccess1.getChar());
+		assertEquals((byte)2, dataAccess1.getByte());
+		assertEquals(Short.MAX_VALUE, dataAccess1.getShort());
+		assertEquals((byte)3, dataAccess1.getByte());
+		assertEquals(Integer.MAX_VALUE, dataAccess1.getInt());
+		assertEquals((byte)4, dataAccess1.getInt());
+		assertEquals((byte)4, dataAccess1.getByte());
+		assertEquals(Long.MAX_VALUE, dataAccess1.getLong());
+		assertEquals((byte)5, dataAccess1.getByte());
+		assertEquals(Float.MAX_VALUE, dataAccess1.getFloat(), 0.0001);
+		assertEquals((byte)6, dataAccess1.getByte());
+		assertEquals((byte)6, dataAccess1.getByte());
+		assertEquals(Double.MAX_VALUE, dataAccess1.getDouble(), 0.0001);
+		assertEquals((byte)7, dataAccess1.getByte());
+		assertEquals((byte)8, dataAccess1.getByte());
+	}
+	
 	@After
-	public void TearDown() {
+	public void tearDown() {
 		dataAccess1.close();
 		FileUtils.delete(fileName);
 	}
