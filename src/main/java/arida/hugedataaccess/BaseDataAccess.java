@@ -5,8 +5,74 @@ public abstract class BaseDataAccess implements DataAccess {
 	protected int segmentSize;
 	protected int segmentSizePower;
 	protected int segmentSizeDivisor;
-	protected static int defaultSegmentSize = 1024 * 1024;  // 1 MB
+	public static final int DEFAULT_SEGMENT_SIZE = 1024 * 1024;  // 1 MB
 
+	public boolean isEmpty() {
+		return (this.getCapacity() == 0);
+	}
+	
+	public byte getByte() {
+		return getByte(currentPosition++);
+	}
+
+	public void setByte(byte element) {
+		setByte(currentPosition++, element);
+	}
+	
+	public char getChar() {
+		return getChar((currentPosition += 2) - 2);  // post increment of more than 1
+	}
+
+	public void setChar(char element) {
+		setChar(currentPosition, element);
+		currentPosition += 2;
+	}
+	
+	public short getShort() {
+		return getShort((currentPosition += 2) - 2);
+	}
+
+	public void setShort(short element) {
+		setShort(currentPosition, element);
+		currentPosition += 2;
+	}
+	
+	public int getInt() {
+		return getInt((currentPosition += 4) - 4);
+	}
+
+	public void setInt(int element) {
+		setInt(currentPosition, element);
+		currentPosition += 4;
+	}
+	
+	public long getLong() {
+		return getLong((currentPosition += 8) - 8);
+	}
+
+	public void setLong(long element) {
+		setLong(currentPosition, element);
+		currentPosition += 8;
+	}
+	
+	public float getFloat() {
+		return getFloat((currentPosition += 4) - 4);
+	}
+
+	public void setFloat(float element) {
+		setFloat(currentPosition, element);
+		currentPosition += 4;
+	}
+	
+	public double getDouble() {
+		return getDouble((currentPosition += 8) - 8);
+	}
+
+	public void setDouble(double element) {
+		setDouble(currentPosition, element);
+		currentPosition += 8;
+	}
+	
 	public long getCurrentPosition() {
 		return this.currentPosition;
 	}
@@ -23,5 +89,5 @@ public abstract class BaseDataAccess implements DataAccess {
 		}
 		this.segmentSizeDivisor = segmentSize - 1;
 	}
-	
+
 }
