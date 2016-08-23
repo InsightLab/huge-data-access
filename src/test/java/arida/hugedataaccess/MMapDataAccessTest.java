@@ -16,7 +16,6 @@ public class MMapDataAccessTest {
 	public static void setUpClass() {
 		FileUtils.delete(fileName);
 	}
-
 	
 	@Before
 	public void setUp() {
