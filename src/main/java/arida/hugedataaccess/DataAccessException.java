@@ -2,6 +2,8 @@ package arida.hugedataaccess;
 
 public class DataAccessException extends RuntimeException {
 
+	private static final long serialVersionUID = 8874298756890171854L;
+
 	public DataAccessException() {
 		super();
 	}
