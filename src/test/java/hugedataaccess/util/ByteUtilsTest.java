@@ -1,4 +1,4 @@
-package arida.hugedataaccess;
+package hugedataaccess.util;
 
 import static org.junit.Assert.*;
 

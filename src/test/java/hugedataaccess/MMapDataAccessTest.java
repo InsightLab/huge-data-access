@@ -1,9 +1,12 @@
-package arida.hugedataaccess;
+package hugedataaccess;
 
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+
+import hugedataaccess.MMapDataAccess;
+import hugedataaccess.util.FileUtils;
 
 public class MMapDataAccessTest extends AbstractDataAccessTest {
 

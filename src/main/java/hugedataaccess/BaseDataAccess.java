@@ -1,4 +1,4 @@
-package arida.hugedataaccess;
+package hugedataaccess;
 
 public abstract class BaseDataAccess implements DataAccess {
 	protected long currentPosition;

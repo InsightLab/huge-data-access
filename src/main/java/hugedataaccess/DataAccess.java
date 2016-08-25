@@ -1,4 +1,4 @@
-package arida.hugedataaccess;
+package hugedataaccess;
 
 public interface DataAccess {
 

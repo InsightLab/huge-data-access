@@ -1,4 +1,4 @@
-package arida.hugedataaccess;
+package hugedataaccess;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -23,14 +23,15 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 	}
 
 	public void ensureCapacity(long bytes) {
+		long numberOfBytes = bytes;
 		try {
-			if (getCapacity() > bytes) { //Current file size is greater than the number of bytes to be mapped
-				bytes = getCapacity();
+			if (getCapacity() > numberOfBytes) { //Current file size is greater than the number of bytes to be mapped
+				numberOfBytes = getCapacity();
 			}
-			if ((bytes % segmentSize) != 0) {
+			if ((numberOfBytes % segmentSize) != 0) {
 				throw new DataAccessException("Capacity must be a multiple of segment size.");
 			}
-			int expectedNumberOfBuffers = (int) Math.ceil(1d * bytes / segmentSize);
+			int expectedNumberOfBuffers = (int) Math.ceil(1d * numberOfBytes / segmentSize);
 			int currentNumberOfBuffers = buffers == null ? 0 : buffers.length;
 			
 			if (expectedNumberOfBuffers > currentNumberOfBuffers) {

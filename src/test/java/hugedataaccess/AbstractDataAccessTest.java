@@ -1,8 +1,12 @@
-package arida.hugedataaccess;
+package hugedataaccess;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import hugedataaccess.ByteBufferDataAccess;
+import hugedataaccess.DataAccess;
+import hugedataaccess.DataAccessException;
 
 public abstract class AbstractDataAccessTest {
 

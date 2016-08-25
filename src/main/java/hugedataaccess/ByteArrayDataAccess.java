@@ -1,45 +1,42 @@
-package arida.hugedataaccess;
+package hugedataaccess;
 
-import java.nio.ByteBuffer;
+import hugedataaccess.util.ByteUtils;
 
-public class ByteBufferDataAccess extends BaseDataAccess {
-	
-	protected ByteBuffer[] buffers;
-	
-	public ByteBufferDataAccess() {
+public class ByteArrayDataAccess extends BaseDataAccess {
+
+	private byte[][] segments;
+
+	public ByteArrayDataAccess() {
 		this(DEFAULT_SEGMENT_SIZE);
 	}
 	
-	public ByteBufferDataAccess(int bufferSize) {
-		setSegmentSize(bufferSize);
-	}
-
-	public void ensureCapacity(long bytes) {
-		if (getCapacity() > bytes) { //Current file size is greater than the number of bytes to be mapped
-			bytes = getCapacity();
-		}
-		if ((bytes % segmentSize) != 0) {
-			throw new DataAccessException("Capacity must be a multiple of segment size.");
-		}
-		int expectedNumberOfBuffers = (int) Math.ceil(1d * bytes / segmentSize);
-		int currentNumberOfBuffers = buffers == null ? 0 : buffers.length;
-		
-		if (expectedNumberOfBuffers > currentNumberOfBuffers) {
-			ByteBuffer[] newBuffers = new ByteBuffer[expectedNumberOfBuffers];
-			if (buffers != null) {
-				for (int i = 0; i < currentNumberOfBuffers; i++) {
-					newBuffers[i] = buffers[i];
-				}
-			}
-			for (int i = currentNumberOfBuffers; i < expectedNumberOfBuffers; i++) {
-				newBuffers[i] = ByteBuffer.allocate(segmentSize);
-			}
-			buffers = newBuffers;
-		}
+	public ByteArrayDataAccess(int segmentSize) {
+		setSegmentSize(segmentSize);
 	}
 	
 	public long getCapacity() {
-		return buffers == null ? 0 : buffers.length * segmentSize;
+		return segments == null ? 0 : segments.length * segmentSize;
+	}
+
+	public void ensureCapacity(long bytes) {
+		if ((bytes % segmentSize) != 0) {
+			throw new DataAccessException("Capacity must be a multiple of segment size.");
+		}
+		int expectedNumberOfSegments = (int) Math.ceil(1d * bytes / segmentSize);
+		int currentNumberOfSegments = segments == null ? 0 : segments.length;
+		
+		if (expectedNumberOfSegments > currentNumberOfSegments) {
+			byte[][] newSegments = new byte[expectedNumberOfSegments][];
+			if (segments != null) {
+				for (int i = 0; i < currentNumberOfSegments; i++) {
+					newSegments[i] = segments[i];
+				}
+			}
+			for (int i = currentNumberOfSegments; i < expectedNumberOfSegments; i++) {
+				newSegments[i] = new byte[segmentSize];
+			}
+			segments = newSegments;
+		}
 	}
 
 	public byte getByte(long bytePos) {
@@ -48,94 +45,89 @@ public class ByteBufferDataAccess extends BaseDataAccess {
 		// (int)(bytePos & segmentSizeDivisor) == (int) (bytePos % segmentSize)
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		return buffers[segmentIndex].get(segmentPos);	
+		return segments[segmentIndex][segmentPos];	
 	}
 	
 	public void setByte(long bytePos, byte element) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		buffers[segmentIndex].put(segmentPos, element);
+		segments[segmentIndex][segmentPos] = element;
 	}
 
 	public char getChar(long bytePos) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		return buffers[segmentIndex].getChar(segmentPos);	
+		return ByteUtils.getChar(segments[segmentIndex], segmentPos);
 	}
-	
+
 	public void setChar(long bytePos, char element) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		buffers[segmentIndex].putChar(segmentPos, element);
+		ByteUtils.setChar(segments[segmentIndex], element, segmentPos);
 	}
 
 	public short getShort(long bytePos) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		return buffers[segmentIndex].getShort(segmentPos);	
+		return ByteUtils.getShort(segments[segmentIndex], segmentPos);
 	}
-	
+
 	public void setShort(long bytePos, short element) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		buffers[segmentIndex].putShort(segmentPos, element);
+		ByteUtils.setShort(segments[segmentIndex], element, segmentPos);
 	}
 
 	public int getInt(long bytePos) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		return buffers[segmentIndex].getInt(segmentPos);	
+		return ByteUtils.getInt(segments[segmentIndex], segmentPos);
 	}
-	
+
 	public void setInt(long bytePos, int element) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		buffers[segmentIndex].putInt(segmentPos, element);
+		ByteUtils.setInt(segments[segmentIndex], element, segmentPos);
 	}
 
 	public long getLong(long bytePos) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		return buffers[segmentIndex].getLong(segmentPos);	
+		return ByteUtils.getLong(segments[segmentIndex], segmentPos);
 	}
-	
+
 	public void setLong(long bytePos, long element) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		buffers[segmentIndex].putLong(segmentPos, element);
+		ByteUtils.setLong(segments[segmentIndex], element, segmentPos);
 	}
 
 	public float getFloat(long bytePos) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		return buffers[segmentIndex].getFloat(segmentPos);	
+		return ByteUtils.getFloat(segments[segmentIndex], segmentPos);
 	}
 
 	public void setFloat(long bytePos, float element) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		buffers[segmentIndex].putFloat(segmentPos, element);
+		ByteUtils.setFloat(segments[segmentIndex], element, segmentPos);
 	}
 
 	public double getDouble(long bytePos) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		return buffers[segmentIndex].getDouble(segmentPos);	
+		return ByteUtils.getDouble(segments[segmentIndex], segmentPos);
 	}
 
 	public void setDouble(long bytePos, double element) {
 		int segmentIndex = (int) bytePos >> segmentSizePower;
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
-		buffers[segmentIndex].putDouble(segmentPos, element);
+		ByteUtils.setDouble(segments[segmentIndex], element, segmentPos);
 	}
-
+	
 	public void close() {
-		if (buffers != null) {
-			for (ByteBuffer buffer : buffers) {
-				buffer.clear();
-			}
-			buffers = null;
-		}
+		segments = null;
 	}
 
 }

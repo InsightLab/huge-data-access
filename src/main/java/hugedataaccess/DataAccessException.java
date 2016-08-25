@@ -1,4 +1,4 @@
-package arida.hugedataaccess;
+package hugedataaccess;
 
 public class DataAccessException extends RuntimeException {
 

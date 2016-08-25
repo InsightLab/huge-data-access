@@ -1,6 +1,8 @@
-package arida.hugedataaccess;
+package hugedataaccess.util;
 
 import java.io.File;
+
+import hugedataaccess.DataAccessException;
 
 public class FileUtils {
 
