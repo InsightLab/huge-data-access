@@ -1,37 +1,43 @@
 package hugedataaccess;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
+import hugedataaccess.util.FileUtils;
+
 public class MMapDataAccess extends ByteBufferDataAccess {
 	
 	private RandomAccessFile randomAccessFile;
+	private boolean isNewFile;
 	
 	public MMapDataAccess(String fileName) {
 		this(fileName, DEFAULT_SEGMENT_SIZE);
 	}
 	
 	public MMapDataAccess(String fileName, int bufferSize) {
+		isNewFile = ! new File(fileName).exists();
 		try {
+			setSegmentSize(bufferSize); // this must be before file creation
 			randomAccessFile = new RandomAccessFile(fileName, "rw");
-			setSegmentSize(bufferSize);
 		} catch (IOException e) {
 			throw new DataAccessException(e.getMessage(), e);
 		}
 	}
 	
 	public MMapDataAccess(String fileName, long bytesCapacity, int bufferSize) {
+		this(fileName, bufferSize);
 		try {
-			randomAccessFile = new RandomAccessFile(fileName, "rw");
-			setSegmentSize(bufferSize);
-		} catch (IOException e) {
-			throw new DataAccessException(e.getMessage(), e);
+			ensureCapacity(bytesCapacity);
+		} catch (RuntimeException e) {
+			if (isNewFile) {
+				FileUtils.delete(fileName);
+			}
+			throw e;
 		}
-		ensureCapacity(bytesCapacity);
 	}
-
 
 	public void ensureCapacity(long bytes) {
 		long numberOfBytes = bytes;
@@ -41,8 +47,12 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 			if (getCapacity() > numberOfBytes) { //Current file size is greater than the number of bytes to be mapped
 				numberOfBytes = getCapacity();
 			}
+			
+			if ((numberOfBytes / segmentSize) >= Integer.MAX_VALUE) {
+				throw new DataAccessException("Buffer size is too small to fit in the given capacity.");
+			}
 			if ((numberOfBytes % segmentSize) != 0) {
-				throw new DataAccessException("Capacity must be a multiple of segment size.");
+				throw new DataAccessException("Capacity must be a multiple of buffer size.");
 			}
 			int expectedNumberOfBuffers = (int) Math.ceil(1d * numberOfBytes / segmentSize);
 			int currentNumberOfBuffers = buffers == null ? 0 : buffers.length;
@@ -63,7 +73,7 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 		} catch (Exception e) {
 			StringBuilder msg = new StringBuilder();
 			msg.append("\nnumberOfBytes (capacity): ").append(numberOfBytes);
-			msg.append("\nsegmentSize: ").append(segmentSize);
+			msg.append("\nbufferSize: ").append(segmentSize);
 			msg.append("\nstartPos: ").append(startPos);
 			msg.append("\nsegment#: ").append(segment);
 			msg.append("\n");

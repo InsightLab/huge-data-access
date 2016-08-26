@@ -1,9 +1,13 @@
 package hugedataaccess;
 
 
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import hugedataaccess.MMapDataAccess;
 import hugedataaccess.util.FileUtils;
@@ -27,6 +31,23 @@ public class MMapDataAccessTest extends AbstractDataAccessTest {
 		dataAccess2.ensureCapacity(1024 * 1024 * 2);
 	}
 
+	@Test(expected = DataAccessException.class)
+	public void testCapacityAndBufferSizeCombination() throws IOException{
+		long bytePos = 1099511627776l * 2;
+		int segmentSize = 1024;
+		File newFile = File.createTempFile("temporaryFile", ".tmp");
+		FileUtils.delete(newFile);
+		try {
+			String fileName = newFile.getAbsolutePath();
+			new MMapDataAccess(fileName, bytePos, segmentSize);
+		} catch (RuntimeException e) {
+			if (newFile.exists())  {
+				throw new RuntimeException("file should not exist");
+			}
+			throw e;
+		}
+	}
+	
 	@After
 	public void tearDown() {
 		dataAccess1.close();
