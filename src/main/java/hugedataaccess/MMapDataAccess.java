@@ -21,10 +21,21 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 			throw new DataAccessException(e.getMessage(), e);
 		}
 	}
+	
+	public MMapDataAccess(String fileName, long bytesCapacity, int bufferSize) {
+		try {
+			randomAccessFile = new RandomAccessFile(fileName, "rw");
+			setSegmentSize(bufferSize);
+		} catch (IOException e) {
+			throw new DataAccessException(e.getMessage(), e);
+		}
+		ensureCapacity(bytesCapacity);
+	}
+
 
 	public void ensureCapacity(long bytes) {
 		long numberOfBytes = bytes;
-		int startPos = -1;
+		long startPos = -1;
 		int segment = -1;
 		try {
 			if (getCapacity() > numberOfBytes) { //Current file size is greater than the number of bytes to be mapped
@@ -51,9 +62,9 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 			}
 		} catch (Exception e) {
 			StringBuilder msg = new StringBuilder();
-			msg.append("\nnumberOfBytes (capacity): ").append(numberOfBytes).append(" - ");
-			msg.append("\nsegmentSize: ").append(segmentSize).append(" - ");
-			msg.append("\nstartPos: ").append(startPos).append(" - ");
+			msg.append("\nnumberOfBytes (capacity): ").append(numberOfBytes);
+			msg.append("\nsegmentSize: ").append(segmentSize);
+			msg.append("\nstartPos: ").append(startPos);
 			msg.append("\nsegment#: ").append(segment);
 			msg.append("\n");
 			msg.append(e.getMessage());
