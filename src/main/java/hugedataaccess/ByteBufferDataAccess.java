@@ -47,85 +47,85 @@ public class ByteBufferDataAccess extends BaseDataAccess {
 		// We are using bit operations to improve time performance:
 		// (int) bytePos >> segmentSizePower   == (int) (bytePos / segmentSize)
 		// (int)(bytePos & segmentSizeDivisor) == (int) (bytePos % segmentSize)
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		return buffers[segmentIndex].get(segmentPos);	
 	}
 	
 	public void setByte(long bytePos, byte element) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		buffers[segmentIndex].put(segmentPos, element);
 	}
 
 	public char getChar(long bytePos) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		return buffers[segmentIndex].getChar(segmentPos);	
 	}
 	
 	public void setChar(long bytePos, char element) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		buffers[segmentIndex].putChar(segmentPos, element);
 	}
 
 	public short getShort(long bytePos) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		return buffers[segmentIndex].getShort(segmentPos);	
 	}
 	
 	public void setShort(long bytePos, short element) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		buffers[segmentIndex].putShort(segmentPos, element);
 	}
 
 	public int getInt(long bytePos) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		return buffers[segmentIndex].getInt(segmentPos);	
 	}
 	
 	public void setInt(long bytePos, int element) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		buffers[segmentIndex].putInt(segmentPos, element);
 	}
 
 	public long getLong(long bytePos) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		return buffers[segmentIndex].getLong(segmentPos);	
 	}
 	
 	public void setLong(long bytePos, long element) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		buffers[segmentIndex].putLong(segmentPos, element);
 	}
 
 	public float getFloat(long bytePos) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		return buffers[segmentIndex].getFloat(segmentPos);	
 	}
 
 	public void setFloat(long bytePos, float element) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		buffers[segmentIndex].putFloat(segmentPos, element);
 	}
 
 	public double getDouble(long bytePos) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		return buffers[segmentIndex].getDouble(segmentPos);	
 	}
 
 	public void setDouble(long bytePos, double element) {
-		int segmentIndex = (int) bytePos >> segmentSizePower;
+		int segmentIndex = (int)(bytePos >> segmentSizePower);
 		int segmentPos =   (int)(bytePos & segmentSizeDivisor);
 		buffers[segmentIndex].putDouble(segmentPos, element);
 	}
