@@ -55,7 +55,7 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 					}
 				}
 				for (segment = currentNumberOfBuffers; segment < expectedNumberOfBuffers; segment++) {
-					startPos = segment * segmentSize;
+					startPos = (long)segment * (long)segmentSize;
 					newBuffers[segment] = randomAccessFile.getChannel().map(FileChannel.MapMode.READ_WRITE, startPos, segmentSize);
 				}
 				buffers = newBuffers;
