@@ -33,7 +33,7 @@ public class MMapDataAccessTest extends AbstractDataAccessTest {
 
 	@Test(expected = DataAccessException.class)
 	public void testCapacityAndBufferSizeCombination() throws IOException{
-		long bytePos = 1099511627776l * 2;
+		long bytePos = 1099511627776L * 2;
 		int segmentSize = 1024;
 		File newFile = File.createTempFile("temporaryFile", ".tmp");
 		FileUtils.delete(newFile);
@@ -42,7 +42,7 @@ public class MMapDataAccessTest extends AbstractDataAccessTest {
 			new MMapDataAccess(fileName, bytePos, segmentSize);
 		} catch (RuntimeException e) {
 			if (newFile.exists())  {
-				throw new RuntimeException("file should not exist");
+				throw new IOException("file should not exist");
 			}
 			throw e;
 		}

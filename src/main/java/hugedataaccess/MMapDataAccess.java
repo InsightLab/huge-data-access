@@ -39,6 +39,15 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 		}
 	}
 
+	private void validateCapacity(long numberOfBytes) {
+		if ((numberOfBytes / segmentSize) >= Integer.MAX_VALUE) {
+			throw new DataAccessException("Buffer size is too small to fit in the given capacity.");
+		}
+		if ((numberOfBytes % segmentSize) != 0) {
+			throw new DataAccessException("Capacity must be a multiple of buffer size.");
+		}
+	}
+
 	public void ensureCapacity(long bytes) {
 		long numberOfBytes = bytes;
 		long startPos = -1;
@@ -47,16 +56,9 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 			if (getCapacity() > numberOfBytes) { //Current file size is greater than the number of bytes to be mapped
 				numberOfBytes = getCapacity();
 			}
-			
-			if ((numberOfBytes / segmentSize) >= Integer.MAX_VALUE) {
-				throw new DataAccessException("Buffer size is too small to fit in the given capacity.");
-			}
-			if ((numberOfBytes % segmentSize) != 0) {
-				throw new DataAccessException("Capacity must be a multiple of buffer size.");
-			}
+			validateCapacity(numberOfBytes);
 			int expectedNumberOfBuffers = (int) Math.ceil(1d * numberOfBytes / segmentSize);
 			int currentNumberOfBuffers = buffers == null ? 0 : buffers.length;
-			
 			if (expectedNumberOfBuffers > currentNumberOfBuffers) {
 				ByteBuffer[] newBuffers = new ByteBuffer[expectedNumberOfBuffers];
 				if (buffers != null) {
@@ -65,7 +67,7 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 					}
 				}
 				for (segment = currentNumberOfBuffers; segment < expectedNumberOfBuffers; segment++) {
-					startPos = (long)segment * (long)segmentSize;
+					startPos = (long) segment * (long) segmentSize;
 					newBuffers[segment] = randomAccessFile.getChannel().map(FileChannel.MapMode.READ_WRITE, startPos, segmentSize);
 				}
 				buffers = newBuffers;
@@ -76,8 +78,7 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 			msg.append("\nbufferSize: ").append(segmentSize);
 			msg.append("\nstartPos: ").append(startPos);
 			msg.append("\nsegment#: ").append(segment);
-			msg.append("\n");
-			msg.append(e.getMessage());
+			msg.append("\n").append(e.getMessage());
 			throw new DataAccessException(msg.toString(), e);
 		}
 	}
