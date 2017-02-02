@@ -33,6 +33,14 @@ public class ByteArrayDataAccessTest extends AbstractDataAccessTest {
 		currentPositionResult = (int) dataAccess1.getCurrentPosition();
 		
 		assertEquals(currentPositionCorrect,currentPositionResult);
+		
+		currentPositionCorrect = 40;
+		dataAccess1.setFloat(2);
+		dataAccess1.setLong(15);
+		
+		currentPositionResult = (int) dataAccess1.getCurrentPosition();
+		assertEquals(currentPositionCorrect,currentPositionResult);
+		
 
 	}
 	
@@ -42,24 +50,7 @@ public class ByteArrayDataAccessTest extends AbstractDataAccessTest {
 		int currentPositionCorrect = 24;
 		int currentPositionResult;
 		
-		//Test if after insert float, the next insert go to next segment.
-		dataAccess1.setDouble(10);
-		dataAccess1.setFloat(4);
-		dataAccess1.setLong(12);
-		
-		currentPositionResult = (int) dataAccess1.getCurrentPosition();
-		
-		assertEquals(currentPositionCorrect,currentPositionResult);
-
-	}
-	
-	@Test
-	public void testCaseManageSet3(){
-		
-		int currentPositionCorrect = 24;
-		int currentPositionResult;
-		
-		//Test if after insert float, the next insert go to next segment.
+		//Test if after insert char, the next insert go to next segment.
 		dataAccess1.setDouble(10);
 		dataAccess1.setChar('c');
 		dataAccess1.setLong(12);
@@ -67,11 +58,20 @@ public class ByteArrayDataAccessTest extends AbstractDataAccessTest {
 		currentPositionResult = (int) dataAccess1.getCurrentPosition();
 		
 		assertEquals(currentPositionCorrect,currentPositionResult);
+		
+		currentPositionCorrect = 36;
+		dataAccess1.setChar('a');
+		dataAccess1.setChar('b');
+		dataAccess1.setChar('c');
+		dataAccess1.setInt(8);
+		
+		
+		currentPositionResult = (int) dataAccess1.getCurrentPosition();
+		assertEquals(currentPositionCorrect,currentPositionResult);
 
 	}
-	
 	@Test
-	public void testCaseManageGet(){
+	public void testCaseManageGet1(){
 		
 		int currentPositionCorrect = 24;
 		int currentPositionResult;
