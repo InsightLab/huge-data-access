@@ -20,55 +20,139 @@ public abstract class BaseDataAccess implements DataAccess {
 	}
 	
 	public char getChar() {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 2){
+			//the next char don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		return getChar((currentPosition += 2) - 2);  // post increment of more than 1
 	}
 
 	public void setChar(char element) {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 2){
+			//the next char don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		setChar(currentPosition, element);
 		currentPosition += 2;
 	}
 	
 	public short getShort() {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 2){
+			//the next short don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		return getShort((currentPosition += 2) - 2);
 	}
 
 	public void setShort(short element) {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 2){
+			//the next short don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		setShort(currentPosition, element);
 		currentPosition += 2;
 	}
 	
 	public int getInt() {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 4){
+			//the next integer don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		return getInt((currentPosition += 4) - 4);
 	}
 
 	public void setInt(int element) {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 4){
+			//the next integer don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		setInt(currentPosition, element);
 		currentPosition += 4;
 	}
 	
 	public long getLong() {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 8){
+			//the next long don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		return getLong((currentPosition += 8) - 8);
 	}
 
 	public void setLong(long element) {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 8){
+			//the next long don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		setLong(currentPosition, element);
 		currentPosition += 8;
 	}
 	
 	public float getFloat() {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 4){
+			//the next float don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		return getFloat((currentPosition += 4) - 4);
 	}
 
 	public void setFloat(float element) {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 4){
+			//the next float don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		setFloat(currentPosition, element);
 		currentPosition += 4;
 	}
 	
 	public double getDouble() {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 4){
+			//the next double don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		return getDouble((currentPosition += 8) - 8);
 	}
 
 	public void setDouble(double element) {
+		int segmentRemainder = this.segmentSize - (int) this.currentPosition & segmentSizeDivisor;
+		
+		if(segmentRemainder < 4){
+			//the next double don't fit in this segment, go to next segment
+			this.currentPosition = this.currentPosition + segmentRemainder;
+		}
+		
 		setDouble(currentPosition, element);
 		currentPosition += 8;
 	}
