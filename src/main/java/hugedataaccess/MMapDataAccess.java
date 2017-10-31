@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-
 import hugedataaccess.util.FileUtils;
 
 public class MMapDataAccess extends ByteBufferDataAccess {
@@ -18,7 +17,8 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 	}
 	
 	public MMapDataAccess(String fileName, int bufferSize) {
-		isNewFile = ! new File(fileName).exists();
+		File f = new File(fileName);
+		isNewFile = ! f.exists();
 		try {
 			setSegmentSize(bufferSize); // this must be before file creation
 			randomAccessFile = new RandomAccessFile(fileName, "rw");
@@ -27,12 +27,17 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 		}
 	}
 	
-	public MMapDataAccess(String fileName, long bytesCapacity, int bufferSize) {
+	public MMapDataAccess(String fileName, long bytesCapacity) throws IOException {
+		this(fileName, bytesCapacity, DEFAULT_SEGMENT_SIZE);
+	}
+	
+	public MMapDataAccess(String fileName, long bytesCapacity, int bufferSize) throws IOException {
 		this(fileName, bufferSize);
 		try {
 			ensureCapacity(bytesCapacity);
-		} catch (RuntimeException e) {
+		} catch (DataAccessException e) {
 			if (isNewFile) {
+				randomAccessFile.close();
 				FileUtils.delete(fileName);
 			}
 			throw e;
@@ -103,6 +108,9 @@ public class MMapDataAccess extends ByteBufferDataAccess {
 				}
 				buffers = null;
 			}
+			
+			System.gc();
+			
 			if (randomAccessFile != null) {
 				randomAccessFile.close();
 			}

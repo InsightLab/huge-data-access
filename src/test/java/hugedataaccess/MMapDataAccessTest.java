@@ -1,12 +1,12 @@
 package hugedataaccess;
 
-
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,8 +16,9 @@ import hugedataaccess.util.FileUtils;
 
 public class MMapDataAccessTest extends AbstractDataAccessTest {
 
-	private static String fileName = "MMapDataAccessTest.mmap";
-	private static String fileName2 = "MMapDataAccessTest2.mmap";
+	private static String tmpDir = "";//System.getProperty("java.io.tmpdir");
+	private static String fileName = tmpDir + "MMapDataAccessTest.mmap";
+	private static String fileName2 = tmpDir + "MMapDataAccessTest2.mmap";
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -38,11 +39,11 @@ public class MMapDataAccessTest extends AbstractDataAccessTest {
 		long bytePos = 1099511627776L * 2;
 		int segmentSize = 1024;
 		File newFile = File.createTempFile("temporaryFile", ".tmp");
-		FileUtils.delete(newFile);
+		newFile.delete();
 		try {
 			String fileName = newFile.getAbsolutePath();
 			new MMapDataAccess(fileName, bytePos, segmentSize);
-		} catch (RuntimeException e) {
+		} catch (DataAccessException e) {
 			if (newFile.exists())  {
 				throw new IOException("file should not exist");
 			}
@@ -189,8 +190,9 @@ public class MMapDataAccessTest extends AbstractDataAccessTest {
 	@After
 	public void tearDown() {
 		dataAccess1.close();
-		FileUtils.delete(fileName);
 		dataAccess2.close();
+		
+		FileUtils.delete(fileName);
 		FileUtils.delete(fileName2);
 	}
 	
