@@ -5,4 +5,5 @@ public interface MMapMap {
 	Long get(Long key);
 	void put(Long key, Long value);
 	Iterable<Long> keySet();
+	void printOrder(Long pos);
 }
