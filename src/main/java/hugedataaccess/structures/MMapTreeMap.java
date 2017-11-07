@@ -160,8 +160,10 @@ public class MMapTreeMap implements MMapMap {
 					setLeft(G, N);
 				else
 					setRight(G, N);
-			} else
+			} else {
 				root = N;
+				treeAccess.setLong(8, root);
+			}
 			break;
 		}
 	}
