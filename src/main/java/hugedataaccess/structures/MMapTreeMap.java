@@ -79,7 +79,7 @@ public class MMapTreeMap implements MMapMap {
 			setLeft(root, -1);
 			setRight(root, -1);
 			setParent(root, -1);
-			setHeight(root, 1);
+			setBalanceFactor(root, 0);
 			treeAccess.setLong(0, treeAccess.getLong(0) + 1);
 			treeAccess.setLong(8, root);
 			pos++;
@@ -108,21 +108,158 @@ public class MMapTreeMap implements MMapMap {
 			setLeft(pos, -1);
 			setRight(pos, -1);
 			setParent(pos, parent);
-			setHeight(pos, 1);
+			setBalanceFactor(pos, 0);
 			treeAccess.setLong(0, treeAccess.getLong(0) + 1);
 			if (isLeft) setLeft(parent, pos);
 			else setRight(parent, pos);
-			fixHeights(pos);
+			balanceTree(pos);
 			pos++;
-		}	
+		}
 	}
 	
-	private void fixHeights(long start) {
-		long parent = getParent(start);
-		while(parent != -1) {
-			setHeight(parent, Math.max(getHeight(getLeft(parent)), getHeight(getRight(parent))) + 1);
-			parent = getParent(parent);
+	private void balanceTree(long Z) {
+		long G, N = -1;
+		for (long X = getParent(Z); X != -1; X = getParent(Z)) {
+			if (Z == getRight(X)) {
+				if (getBalanceFactor(X) > 0) {
+					G = getParent(X);
+					if (getBalanceFactor(Z) < 0)
+						N = rotateRightLeft(X, Z);
+					else
+						N = rotateLeft(X, Z);
+				} else {
+					if (getBalanceFactor(X) < 0) {
+						setBalanceFactor(X, 0);
+						break;
+					}
+					setBalanceFactor(X, 1);
+					Z = X;
+					continue;
+				}
+			} else {
+				if (getBalanceFactor(X) < 0) {
+					G = getParent(X);
+					if (getBalanceFactor(Z) > 0)
+						N = rotateLeftRight(X, Z);
+					else
+						N = rotateRight(X, Z);
+				} else {
+					if (getBalanceFactor(X) > 0) {
+						setBalanceFactor(X, 0);
+						break;
+					}
+					setBalanceFactor(X, -1);
+					Z = X;
+					continue;
+				}
+			}
+			
+			setParent(N, G);
+			if (G != -1l) {
+				if (X == getLeft(G))
+					setLeft(G, N);
+				else
+					setRight(G, N);
+			} else
+				root = N;
+			break;
 		}
+	}
+	
+	private long rotateLeft(long X, long Z) {
+		//System.out.println("LEFT: " + Z + " to " + X);
+		long t23 = getLeft(Z);
+		setRight(X, t23);
+		if (t23 != -1l)
+			setParent(t23, X);
+		setLeft(Z, X);
+		setParent(X, Z);
+		if (getBalanceFactor(Z) == 0) {
+			setBalanceFactor(X, 1);
+			setBalanceFactor(Z, -1);
+		} else {
+			setBalanceFactor(X, 0);
+			setBalanceFactor(Z, 0);
+		}
+		return Z;
+	}
+	
+	private long rotateRightLeft(long X, long Z) {
+		long Y = getLeft(Z);
+		//System.out.println("RIGHT and LEFT: " + Y + " to " + Z + " and " + Y + " to " + X);
+		long t3 = getRight(Y);
+		setLeft(Z, t3);
+		if (t3 != -1l)
+			setParent(t3, Z);
+		setRight(Y, Z);
+		setParent(Z, Y);
+		long t2 = getLeft(Y);
+		setRight(X, t2);
+		if (t2 != -1l)
+			setParent(t2, X);
+		setLeft(Y, X);
+		setParent(X, Y);
+		int yBalance = getBalanceFactor(Y);
+		if (yBalance > 0) {
+			setBalanceFactor(X, -1);
+			setBalanceFactor(Z, 0);
+		} else if(yBalance == 0) {
+			setBalanceFactor(X, 0);
+			setBalanceFactor(Z, 0);
+		} else {
+			setBalanceFactor(X, 0);
+			setBalanceFactor(Z, 1);
+		}
+		setBalanceFactor(Y, 0);
+		return Y;
+	}
+	
+	private long rotateRight(long X, long Z) {
+		//System.out.println("RIGHT: " + Z + " to " + X);
+		long t23 = getRight(Z);
+		setLeft(X, t23);
+		if (t23 != -1l)
+			setParent(t23, X);
+		setRight(Z, X);
+		setParent(X, Z);
+		if (getBalanceFactor(Z) == 0) {
+			setBalanceFactor(X, -1);
+			setBalanceFactor(Z, 1);
+		} else {
+			setBalanceFactor(X, 0);
+			setBalanceFactor(Z, 0);
+		}
+		return Z;
+	}
+	
+	private long rotateLeftRight(long X, long Z) {
+		long Y = getRight(Z);
+		//System.out.println("LEFT and RIGHT: " + Y + " to " + Z + " and " + Y + " to " + X);
+		long t3 = getLeft(Y);
+		setRight(Z, t3);
+		if (t3 != -1l)
+			setParent(t3, Z);
+		setLeft(Y, Z);
+		setParent(Z, Y);
+		long t2 = getRight(Y);
+		setLeft(X, t2);
+		if (t2 != -1l)
+			setParent(t2, X);
+		setRight(Y, X);
+		setParent(X, Y);
+		int yBalance = getBalanceFactor(Y);
+		if (yBalance < 0) {
+			setBalanceFactor(X, 1);
+			setBalanceFactor(Z, 0);
+		} else if(yBalance == 0) {
+			setBalanceFactor(X, 0);
+			setBalanceFactor(Z, 0);
+		} else {
+			setBalanceFactor(X, 0);
+			setBalanceFactor(Z, -1);
+		}
+		setBalanceFactor(Y, 0);
+		return Y;
 	}
 
 	public Iterable<Long> keySet() {
@@ -169,7 +306,7 @@ public class MMapTreeMap implements MMapMap {
 		return treeAccess.getLong(getIndex(pos) + 8*4);
 	}
 	
-	private int getHeight(long pos) {
+	private int getBalanceFactor(long pos) {
 		if (pos == -1) return 0;
 		return treeAccess.getInt(getIndex(pos) + 8*5);
 	}
@@ -195,14 +332,14 @@ public class MMapTreeMap implements MMapMap {
 		treeAccess.setLong(getIndex(pos) + 8*4, parent);
 	}
 	
-	private void setHeight(long pos, int height) {
-		treeAccess.setInt(getIndex(pos) + 8*5, height);
+	private void setBalanceFactor(long pos, int balanceFactor) {
+		treeAccess.setInt(getIndex(pos) + 8*5, balanceFactor);
 	}
 	
 	public void printOrder(Long pos) {
 		if (pos != -1) {
 			printOrder(getLeft(pos));
-			System.out.println(getKey(pos));
+			System.out.print(getKey(pos) + " | ");
 			printOrder(getRight(pos));
 		}
 	}
