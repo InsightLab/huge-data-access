@@ -9,7 +9,7 @@ import hugedataaccess.MMapDataAccess;
 
 public class MMapTreeMap implements MMapMap {
 	
-	private static final int NODE_SIZE = 5*8 + 4;
+	private static final int NODE_SIZE = 8*8;
 	private DataAccess treeAccess;
 	private long pos = 0;
 	private long root = -1;

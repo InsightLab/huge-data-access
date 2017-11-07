@@ -54,5 +54,13 @@ public class MMapTreeMapTest {
 		map.put(9l, 99l);
 		assertEquals("Put Test 2", 99l, map.get(9l), 0);
 	}
+	
+	@Test
+	public void bigTest() {
+		for (long i = 0; i < 100000; i++) {
+			map.put(i, i);
+		}
+		assertEquals("Big test", 82734l, map.get(82734l), 0);
+	}
 
 }
