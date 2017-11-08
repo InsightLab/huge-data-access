@@ -2,6 +2,8 @@ package hugedataaccess.structures;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -13,8 +15,12 @@ public class MMapTreeMapTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		FileUtils.delete("/treeMap/treeMap.mmap");
-		FileUtils.delete("/treeMap/");
+		String dir = "/treeMap/";
+		File dirFile = new File(dir);
+		if (dirFile.exists()) {
+			FileUtils.delete("/treeMap/treeMap.mmap");
+			FileUtils.delete("/treeMap/");
+		}
 		map = new MMapTreeMap("/treeMap/");
 //		System.out.println("putting 1");
 		map.put(1l, 4l);
