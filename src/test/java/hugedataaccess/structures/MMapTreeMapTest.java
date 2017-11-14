@@ -15,13 +15,13 @@ public class MMapTreeMapTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		String dir = "/treeMap/";
+		String dir = "treeMap/";
 		File dirFile = new File(dir);
 		if (dirFile.exists()) {
-			FileUtils.delete("/treeMap/treeMap.mmap");
-			FileUtils.delete("/treeMap/");
+			FileUtils.delete("treeMap/treeMap.mmap");
+			FileUtils.delete("treeMap/");
 		}
-		map = new MMapTreeMap("/treeMap/");
+		map = new MMapTreeMap("treeMap/");
 //		System.out.println("putting 1");
 		map.put(1l, 4l);
 //		System.out.println("putting 4");
@@ -31,6 +31,14 @@ public class MMapTreeMapTest {
 //		System.out.println("putting 9");
 		map.put(9l, 1l);
 		//map.printOrder(0l);
+	}
+	
+	@Test
+	public void testContains() {
+		assertEquals("Contains Test 1", true, map.containsKey(1l));
+		assertEquals("Contains Test 2", false, map.containsKey(20l));
+		assertEquals("Contains Test 3", false, map.containsKey(33l));
+		assertEquals("Contains Test 4", true, map.containsKey(9l));
 	}
 
 	@Test
@@ -61,12 +69,12 @@ public class MMapTreeMapTest {
 		assertEquals("Put Test 2", 99l, map.get(9l), 0);
 	}
 	
-	@Test
+	/*@Test
 	public void bigTest() {
 		for (long i = 0; i < 100000; i++) {
 			map.put(i, i);
 		}
 		assertEquals("Big test", 82734l, map.get(82734l), 0);
-	}
+	}*/
 
 }

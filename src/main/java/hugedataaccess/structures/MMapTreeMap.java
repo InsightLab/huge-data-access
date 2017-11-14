@@ -39,7 +39,7 @@ public class MMapTreeMap implements MMapMap {
 			exists = false;
 		}
 		try {
-			treeAccess = new MMapDataAccess(path + "treeMap.mmap", 1024*1024l);
+			treeAccess = new MMapDataAccess(path + "treeMap.mmap", 1024*1024*32l);
 			if (exists) {
 				pos = treeAccess.getLong(0);
 				root = treeAccess.getLong(8);
@@ -58,6 +58,10 @@ public class MMapTreeMap implements MMapMap {
 	public Long size() {
 		return treeAccess.getLong(0);
 	}
+	
+	public boolean containsKey(Long key) {
+		return get(key) != null;
+	}
 
 	public Long get(Long key) {
 		long node = root;
@@ -71,7 +75,7 @@ public class MMapTreeMap implements MMapMap {
 	}
 
 	public void put(Long key, Long value) {
-		if ((size() + 1)*NODE_SIZE > treeAccess.getCapacity()) treeAccess.ensureCapacity(treeAccess.getCapacity() + 1024*1024l);
+		if ((size() + 1)*NODE_SIZE > treeAccess.getCapacity()) treeAccess.ensureCapacity(treeAccess.getCapacity() + 1024*1024*32l);
 		if (root == -1) {
 			root = pos;
 			setKey(root, key);
