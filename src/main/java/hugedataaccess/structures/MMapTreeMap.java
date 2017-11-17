@@ -173,7 +173,6 @@ public class MMapTreeMap implements MMapMap {
 	}
 	
 	private long rotateLeft(long X, long Z) {
-		//System.out.println("LEFT: " + Z + " to " + X);
 		long t23 = getLeft(Z);
 		setRight(X, t23);
 		if (t23 != -1l)
@@ -192,7 +191,6 @@ public class MMapTreeMap implements MMapMap {
 	
 	private long rotateRightLeft(long X, long Z) {
 		long Y = getLeft(Z);
-		//System.out.println("RIGHT and LEFT: " + Y + " to " + Z + " and " + Y + " to " + X);
 		long t3 = getRight(Y);
 		setLeft(Z, t3);
 		if (t3 != -1l)
@@ -221,7 +219,6 @@ public class MMapTreeMap implements MMapMap {
 	}
 	
 	private long rotateRight(long X, long Z) {
-		//System.out.println("RIGHT: " + Z + " to " + X);
 		long t23 = getRight(Z);
 		setLeft(X, t23);
 		if (t23 != -1l)
@@ -240,7 +237,6 @@ public class MMapTreeMap implements MMapMap {
 	
 	private long rotateLeftRight(long X, long Z) {
 		long Y = getRight(Z);
-		//System.out.println("LEFT and RIGHT: " + Y + " to " + Z + " and " + Y + " to " + X);
 		long t3 = getLeft(Y);
 		setRight(Z, t3);
 		if (t3 != -1l)

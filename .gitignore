@@ -17,3 +17,6 @@ hs_err_pid*
 .settings
 .idea
 *.iml
+
+*.DS_Store
+treeMap/
