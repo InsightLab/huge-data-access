@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>insightlab</groupId>
+	<groupId>br.ufc.insightlab</groupId>
 	<artifactId>huge-data-access</artifactId>
 	<version>0.1.1</version>
 	<name>Huge Data Access</name>
@@ -104,20 +104,20 @@
 				</executions>
 			</plugin>
 
-			<!--
+			
 			<plugin>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>1.6</version>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<phase>repository:bundle-create</phase>
 						<goals>
 							<goal>sign</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
-			--> 
+			
 		</plugins>
 	</build>
 
