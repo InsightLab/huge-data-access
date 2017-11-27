@@ -1,6 +1,6 @@
-package hugedataaccess;
+package org.insightlab.hugedataaccess;
 
-import hugedataaccess.util.ByteUtils;
+import org.insightlab.hugedataaccess.util.ByteUtils;
 
 public class ByteArrayDataAccess extends BaseDataAccess {
 

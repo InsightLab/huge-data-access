@@ -1,4 +1,4 @@
-package hugedataaccess.util;
+package org.insightlab.hugedataaccess.util;
 
 public class ByteUtils {
 

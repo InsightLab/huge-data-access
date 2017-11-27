@@ -1,12 +1,11 @@
-package hugedataaccess;
+package org.insightlab.hugedataaccess;
 
 import static org.junit.Assert.*;
 
+import org.insightlab.hugedataaccess.ByteBufferDataAccess;
+import org.insightlab.hugedataaccess.DataAccess;
+import org.insightlab.hugedataaccess.DataAccessException;
 import org.junit.Test;
-
-import hugedataaccess.ByteBufferDataAccess;
-import hugedataaccess.DataAccess;
-import hugedataaccess.DataAccessException;
 
 public abstract class AbstractDataAccessTest {
 

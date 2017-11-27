@@ -1,23 +1,23 @@
-package hugedataaccess;
+package org.insightlab.hugedataaccess;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import org.insightlab.hugedataaccess.ByteArrayDataAccess;
+import org.insightlab.hugedataaccess.ByteBufferDataAccess;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import hugedataaccess.ByteBufferDataAccess;
-
-public class ByteBufferDataAccessTest extends AbstractDataAccessTest {
+public class ByteArrayDataAccessTest extends AbstractDataAccessTest {
 
 	@Before
 	public void setUp() {
-		dataAccess1 = new ByteBufferDataAccess(16);
+		dataAccess1 = new ByteArrayDataAccess(16);
 		dataAccess1.ensureCapacity(64);
 		dataAccess2 = new ByteBufferDataAccess();
 		dataAccess2.ensureCapacity(1024 * 1024 * 2);
 	}
-	
+
 	@Test
 	public void testCaseManageSet1(){
 		
@@ -69,9 +69,8 @@ public class ByteBufferDataAccessTest extends AbstractDataAccessTest {
 		assertEquals(currentPositionCorrect,currentPositionResult);
 
 	}
-	
 	@Test
-	public void testCaseManageGet(){
+	public void testCaseManageGet1(){
 		
 		int currentPositionCorrect = 24;
 		int currentPositionResult;

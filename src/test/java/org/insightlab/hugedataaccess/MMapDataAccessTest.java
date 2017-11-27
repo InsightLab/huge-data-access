@@ -1,24 +1,55 @@
-package hugedataaccess;
+package org.insightlab.hugedataaccess;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.insightlab.hugedataaccess.DataAccessException;
+import org.insightlab.hugedataaccess.MMapDataAccess;
+import org.insightlab.hugedataaccess.util.FileUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import hugedataaccess.ByteArrayDataAccess;
-import hugedataaccess.ByteBufferDataAccess;
+public class MMapDataAccessTest extends AbstractDataAccessTest {
 
-public class ByteArrayDataAccessTest extends AbstractDataAccessTest {
+	private static String tmpDir = "";//System.getProperty("java.io.tmpdir");
+	private static String fileName = tmpDir + "MMapDataAccessTest.mmap";
+	private static String fileName2 = tmpDir + "MMapDataAccessTest2.mmap";
 
+	@BeforeClass
+	public static void setUpClass() {
+		FileUtils.delete(fileName);
+		FileUtils.delete(fileName2);
+	}
+	
 	@Before
 	public void setUp() {
-		dataAccess1 = new ByteArrayDataAccess(16);
+		dataAccess1 = new MMapDataAccess(fileName, 16);
 		dataAccess1.ensureCapacity(64);
-		dataAccess2 = new ByteBufferDataAccess();
+		dataAccess2 = new MMapDataAccess(fileName2);
 		dataAccess2.ensureCapacity(1024 * 1024 * 2);
 	}
 
+	@Test(expected = DataAccessException.class)
+	public void testCapacityAndBufferSizeCombination() throws IOException{
+		long bytePos = 1099511627776L * 2;
+		int segmentSize = 1024;
+		File newFile = File.createTempFile("temporaryFile", ".tmp");
+		newFile.delete();
+		try {
+			String fileName = newFile.getAbsolutePath();
+			new MMapDataAccess(fileName, bytePos, segmentSize);
+		} catch (DataAccessException e) {
+			if (newFile.exists())  {
+				throw new IOException("file should not exist");
+			}
+			throw e;
+		}
+	}
+	
 	@Test
 	public void testCaseManageSet1(){
 		
@@ -70,8 +101,9 @@ public class ByteArrayDataAccessTest extends AbstractDataAccessTest {
 		assertEquals(currentPositionCorrect,currentPositionResult);
 
 	}
+	
 	@Test
-	public void testCaseManageGet1(){
+	public void testCaseManageGet(){
 		
 		int currentPositionCorrect = 24;
 		int currentPositionResult;
@@ -158,6 +190,9 @@ public class ByteArrayDataAccessTest extends AbstractDataAccessTest {
 	public void tearDown() {
 		dataAccess1.close();
 		dataAccess2.close();
+		
+		FileUtils.delete(fileName);
+		FileUtils.delete(fileName2);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package hugedataaccess;
+package org.insightlab.hugedataaccess;
 
 public abstract class BaseDataAccess implements DataAccess {
 	protected long currentPosition;

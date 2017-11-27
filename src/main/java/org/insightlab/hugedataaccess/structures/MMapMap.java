@@ -1,4 +1,4 @@
-package hugedataaccess.structures;
+package org.insightlab.hugedataaccess.structures;
 
 public interface MMapMap {
 	Long size();

@@ -1,11 +1,11 @@
-package hugedataaccess.structures;
+package org.insightlab.hugedataaccess.structures;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import hugedataaccess.DataAccess;
-import hugedataaccess.MMapDataAccess;
+import org.insightlab.hugedataaccess.DataAccess;
+import org.insightlab.hugedataaccess.MMapDataAccess;
 
 public class MMapTreeMap implements MMapMap {
 	

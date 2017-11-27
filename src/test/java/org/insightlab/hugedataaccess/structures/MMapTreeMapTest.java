@@ -1,13 +1,14 @@
-package hugedataaccess.structures;
+package org.insightlab.hugedataaccess.structures;
 
 import static org.junit.Assert.*;
 
 import java.io.File;
 
+import org.insightlab.hugedataaccess.structures.MMapMap;
+import org.insightlab.hugedataaccess.structures.MMapTreeMap;
+import org.insightlab.hugedataaccess.util.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import hugedataaccess.util.FileUtils;
 
 public class MMapTreeMapTest {
 	

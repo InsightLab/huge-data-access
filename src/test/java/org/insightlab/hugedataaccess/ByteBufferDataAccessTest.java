@@ -1,53 +1,20 @@
-package hugedataaccess;
+package org.insightlab.hugedataaccess;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.IOException;
-
+import org.insightlab.hugedataaccess.ByteBufferDataAccess;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import hugedataaccess.MMapDataAccess;
-import hugedataaccess.util.FileUtils;
+public class ByteBufferDataAccessTest extends AbstractDataAccessTest {
 
-public class MMapDataAccessTest extends AbstractDataAccessTest {
-
-	private static String tmpDir = "";//System.getProperty("java.io.tmpdir");
-	private static String fileName = tmpDir + "MMapDataAccessTest.mmap";
-	private static String fileName2 = tmpDir + "MMapDataAccessTest2.mmap";
-
-	@BeforeClass
-	public static void setUpClass() {
-		FileUtils.delete(fileName);
-		FileUtils.delete(fileName2);
-	}
-	
 	@Before
 	public void setUp() {
-		dataAccess1 = new MMapDataAccess(fileName, 16);
+		dataAccess1 = new ByteBufferDataAccess(16);
 		dataAccess1.ensureCapacity(64);
-		dataAccess2 = new MMapDataAccess(fileName2);
+		dataAccess2 = new ByteBufferDataAccess();
 		dataAccess2.ensureCapacity(1024 * 1024 * 2);
-	}
-
-	@Test(expected = DataAccessException.class)
-	public void testCapacityAndBufferSizeCombination() throws IOException{
-		long bytePos = 1099511627776L * 2;
-		int segmentSize = 1024;
-		File newFile = File.createTempFile("temporaryFile", ".tmp");
-		newFile.delete();
-		try {
-			String fileName = newFile.getAbsolutePath();
-			new MMapDataAccess(fileName, bytePos, segmentSize);
-		} catch (DataAccessException e) {
-			if (newFile.exists())  {
-				throw new IOException("file should not exist");
-			}
-			throw e;
-		}
 	}
 	
 	@Test
@@ -190,9 +157,6 @@ public class MMapDataAccessTest extends AbstractDataAccessTest {
 	public void tearDown() {
 		dataAccess1.close();
 		dataAccess2.close();
-		
-		FileUtils.delete(fileName);
-		FileUtils.delete(fileName2);
 	}
 	
 }

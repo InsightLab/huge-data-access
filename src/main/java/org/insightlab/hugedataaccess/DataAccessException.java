@@ -1,4 +1,4 @@
-package hugedataaccess;
+package org.insightlab.hugedataaccess;
 
 public class DataAccessException extends RuntimeException {
 

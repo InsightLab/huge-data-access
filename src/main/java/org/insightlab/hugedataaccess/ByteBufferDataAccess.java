@@ -1,4 +1,4 @@
-package hugedataaccess;
+package org.insightlab.hugedataaccess;
 
 import java.nio.ByteBuffer;
 

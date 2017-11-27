@@ -1,11 +1,11 @@
-package hugedataaccess.util;
+package org.insightlab.hugedataaccess.util;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import hugedataaccess.DataAccessException;
+import org.insightlab.hugedataaccess.DataAccessException;
 
 
 public class FileUtils {

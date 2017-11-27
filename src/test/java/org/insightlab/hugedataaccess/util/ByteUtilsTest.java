@@ -1,7 +1,8 @@
-package hugedataaccess.util;
+package org.insightlab.hugedataaccess.util;
 
 import static org.junit.Assert.*;
 
+import org.insightlab.hugedataaccess.util.ByteUtils;
 import org.junit.Test;
 
 
